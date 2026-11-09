@@ -1,0 +1,249 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lucky Spin GOMENG88</title>
+<style>
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  min-height:100vh;
+  font-family:Arial,sans-serif;
+  background:radial-gradient(circle at top,#492080,#120921 65%);
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+.game {
+  width:100%;
+  max-width:440px;
+  text-align:center;
+  background:linear-gradient(145deg,#291044,#160a28);
+  border:2px solid #f5c542;
+  border-radius:25px;
+  padding:25px 18px;
+  box-shadow:0 0 35px #a52cff55;
+}
+h1 {
+  color:#ffd84d;
+  text-shadow:0 0 15px #ff9d00;
+  margin:5px 0;
+  font-size:32px;
+}
+.subtitle { color:#c9b4e8; margin-bottom:22px; }
+.balance {
+  background:#10091c;
+  border:1px solid #7545a7;
+  padding:13px;
+  border-radius:12px;
+  margin-bottom:20px;
+}
+.balance span { color:#ffd84d; font-size:25px; font-weight:bold; }
+.machine {
+  background:linear-gradient(135deg,#fbd45b,#a45a0b);
+  padding:12px;
+  border-radius:20px;
+  box-shadow:0 8px 0 #633400;
+}
+.reels {
+  display:flex;
+  gap:8px;
+  background:#170d20;
+  padding:12px;
+  border-radius:14px;
+}
+.reel {
+  flex:1;
+  height:100px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:52px;
+  background:linear-gradient(#fff,#e7d9f4);
+  border-radius:12px;
+  color:#222;
+  box-shadow:inset 0 0 12px #777;
+}
+.spinning {
+  animation:shake .12s infinite;
+}
+@keyframes shake {
+  0% { transform:translateY(-5px); }
+  50% { transform:translateY(5px); }
+  100% { transform:translateY(-5px); }
+}
+.controls { margin-top:25px; }
+.bet-row {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:15px;
+  margin-bottom:18px;
+}
+.bet-row button {
+  background:#60339b;
+  color:white;
+  border:0;
+  padding:9px 17px;
+  border-radius:9px;
+  font-size:18px;
+  cursor:pointer;
+}
+#bet { color:#ffd84d; font-weight:bold; }
+.spin {
+  width:100%;
+  padding:17px;
+  border:0;
+  border-radius:14px;
+  background:linear-gradient(90deg,#ffb900,#ff5b00);
+  color:white;
+  font-size:23px;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 5px 0 #a63a00;
+}
+.spin:active { transform:translateY(4px); box-shadow:none; }
+.spin:disabled { opacity:.5; cursor:not-allowed; }
+#message {
+  min-height:48px;
+  margin-top:20px;
+  font-size:19px;
+  font-weight:bold;
+  color:#ffe36b;
+}
+.info { color:#a995bb; font-size:12px; margin-top:18px; }
+</style>
+</head>
+<body>
+
+<div class="game">
+  <h1>🎰 LUCKY SPIN GOMENG88 </h1>
+  <div class="subtitle">TRY YOUR LUCK!</div>
+
+  <div class="balance">
+    SALDO KOIN SIA GOBLOG<br>
+    <span id="balance">1000</span> 🪙
+  </div>
+
+  <div class="machine">
+    <div class="reels">
+      <div class="reel" id="r1">🍒</div>
+      <div class="reel" id="r2">🍋</div>
+      <div class="reel" id="r3">💎</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="bet-row">
+      <button onclick="changeBet(-10)">−</button>
+      <div>BET: <span id="bet">50</span> 🪙</div>
+      <button onclick="changeBet(10)">+</button>
+    </div>
+    <button class="spin" id="spinBtn" onclick="spin()">SPIN NOW ⚡</button>
+  </div>
+
+  <div id="message">✨ Siap untuk bermain?</div>
+  <div class="info">
+    3 simbol sama = JACKPOT!<br>
+    Copyright 2026 GOMENG88 ©
+  </div>
+</div>
+
+<script>
+const symbols = ["🍒","🍋","🍊","🍇","🍉","⭐","💎","7️⃣"];
+
+let balance = 1000;
+let bet = 50;
+let spinning = false;
+
+const reels = [
+  document.getElementById("r1"),
+  document.getElementById("r2"),
+  document.getElementById("r3")
+];
+
+function update() {
+  document.getElementById("balance").textContent = balance;
+  document.getElementById("bet").textContent = bet;
+}
+
+function changeBet(amount) {
+  if (spinning) return;
+  bet = Math.max(10, Math.min(200, bet + amount));
+  update();
+}
+
+function spin() {
+  if (spinning) return;
+
+  if (balance < bet) {
+    document.getElementById("message").textContent =
+      "Koin tidak cukup! 😅";
+    return;
+  }
+
+  spinning = true;
+  balance -= bet;
+  update();
+
+  document.getElementById("spinBtn").disabled = true;
+  document.getElementById("message").textContent = "🎰 SPINNING...";
+
+  reels.forEach(r => r.classList.add("spinning"));
+
+  let result = [];
+
+  reels.forEach((reel, index) => {
+    let counter = 0;
+    const interval = setInterval(() => {
+      reel.textContent =
+        symbols[Math.floor(Math.random() * symbols.length)];
+
+      counter++;
+
+      if (counter >= 12 + index * 9) {
+        clearInterval(interval);
+        reel.classList.remove("spinning");
+
+        result[index] =
+          symbols[Math.floor(Math.random() * symbols.length)];
+
+        reel.textContent = result[index];
+
+        if (result.filter(x => x !== undefined).length === 3) {
+          finish(result);
+        }
+      }
+    }, 90);
+  });
+}
+
+function finish(result) {
+  const [a,b,c] = result;
+  let reward = 0;
+  let message = "Belum beruntung! Coba lagi 🍀";
+
+  if (a === b && b === c) {
+    reward = bet * (a === "7️⃣" ? 20 : a === "💎" ? 15 : 10);
+    message = "🎉 JACKPOT BESAR! +" + reward + " KOIN!";
+  } else if (a === b || b === c || a === c) {
+    reward = bet * 2;
+    message = "✨ NICE! Dapat +" + reward + " KOIN!";
+  }
+
+  balance += reward;
+  update();
+
+  document.getElementById("message").textContent = message;
+
+  spinning = false;
+  document.getElementById("spinBtn").disabled = false;
+}
+</script>
+
+</body>
+</html>
